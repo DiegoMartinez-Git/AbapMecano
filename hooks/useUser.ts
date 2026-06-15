@@ -11,6 +11,7 @@ interface Profile {
   level: number
   streak_days: number
   last_activity: string | null
+  coins?: number
 }
 
 export function useUser() {

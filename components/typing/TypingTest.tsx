@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import type { TestMode, TestStatus, TimeLimit, WordCount, TestResult, TextCategory } from '@/types'
 import { generateText } from '@/lib/texts'
@@ -19,12 +19,15 @@ import { LiveSparkline }    from './LiveSparkline'
 import { CustomTextModal }  from './CustomTextModal'
 import { saveTypingResult, getPersonalBest } from '@/lib/actions'
 import { useToastStore } from '@/store/toastStore'
+import { useSettings } from '@/store/settingsStore'
+import { KeyboardGuide } from './KeyboardGuide'
 
 interface TypingTestProps {
   initialText?: string
   textCategory?: TextCategory
   hideSelector?: boolean
   initialMode?: TestMode
+  onComplete?: (result: TestResult) => void
 }
 
 export function TypingTest({
@@ -32,8 +35,15 @@ export function TypingTest({
   textCategory = 'generic',
   hideSelector = false,
   initialMode = 'timed',
+  onComplete,
 }: TypingTestProps) {
   const pushToast = useToastStore((s) => s.push)
+  const fontScale    = useSettings((s) => s.fontScale)
+  const showKeyboard = useSettings((s) => s.showKeyboard)
+  // Evita mismatch de hidratación con los ajustes persistidos en localStorage
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => setMounted(true), [])
+  const effFontScale = mounted ? fontScale : 1
 
   // ── Configuration ─────────────────────────────────────────────
   const [mode, setMode]           = useState<TestMode>(initialMode)
@@ -82,18 +92,22 @@ export function TypingTest({
   const isFocusedRef      = useRef(true)
   const charErrorsRef     = useRef<Record<string, number>>({})
   const customTextRef     = useRef<string | null>(initialText ?? null)
+  const onCompleteRef     = useRef(onComplete)
+  onCompleteRef.current   = onComplete
 
-  // Sync refs during render
-  typedRef.current        = typed
-  textRef.current         = text
-  statusRef.current       = status
-  modeRef.current         = mode
-  timeLimitRef.current    = timeLimit
-  wordCountRef.current    = wordCount
-  sapModeRef.current      = sapMode
-  precisionModeRef.current = precisionMode
-  numbersRef.current      = numbersMode
-  isFocusedRef.current    = isFocused
+  // Sync refs after each render (commit phase, not render phase)
+  useLayoutEffect(() => {
+    typedRef.current         = typed
+    textRef.current          = text
+    statusRef.current        = status
+    modeRef.current          = mode
+    timeLimitRef.current     = timeLimit
+    wordCountRef.current     = wordCount
+    sapModeRef.current       = sapMode
+    precisionModeRef.current = precisionMode
+    numbersRef.current       = numbersMode
+    isFocusedRef.current     = isFocused
+  })
 
   // ── Generate text on config change ────────────────────────────
   useEffect(() => {
@@ -178,6 +192,8 @@ export function TypingTest({
     setResult(finalResult)
     setStatus('finished')
     statusRef.current = 'finished'
+
+    onCompleteRef.current?.(finalResult)
 
     ;(async () => {
       const prev      = await getPersonalBest(modeRef.current, timeLimitRef.current, wordCountRef.current)
@@ -408,7 +424,7 @@ export function TypingTest({
               initial={{ opacity: 0, y: -6 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -6 }}
-              className="mt-3 flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[var(--color-warning)]/10 border border-[var(--color-warning)]/30 text-[var(--color-warning)] text-xs font-medium"
+              className="mt-3 flex items-center gap-2 px-3 py-1.5 rounded-md bg-[var(--color-warning)]/10 border border-[var(--color-warning)]/30 text-[var(--color-warning)] text-xs font-medium"
             >
               <span>⇪</span>
               Bloq Mayús activado
@@ -468,6 +484,7 @@ export function TypingTest({
                   isFocused={isFocused}
                   status={status}
                   shake={shakeText}
+                  fontScale={effFontScale}
                 />
                 <Countdown count={countdown} />
               </div>
@@ -509,6 +526,11 @@ export function TypingTest({
               </span>
             )}
           </motion.div>
+        )}
+
+        {/* Teclado con guía de dedos */}
+        {mounted && showKeyboard && status !== 'finished' && (
+          <KeyboardGuide nextChar={text[typed.length] ?? ''} />
         )}
       </div>
     </>

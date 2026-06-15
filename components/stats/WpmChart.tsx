@@ -45,8 +45,8 @@ export function WpmChart({ data }: { data: DataPoint[] }) {
     >
       <defs>
         <linearGradient id="wpmGrad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%"   stopColor="#a78bfa" stopOpacity="0.25" />
-          <stop offset="100%" stopColor="#a78bfa" stopOpacity="0" />
+          <stop offset="0%"   style={{ stopColor: 'var(--color-accent)' }} stopOpacity="0.18" />
+          <stop offset="100%" style={{ stopColor: 'var(--color-accent)' }} stopOpacity="0" />
         </linearGradient>
       </defs>
 
@@ -56,9 +56,9 @@ export function WpmChart({ data }: { data: DataPoint[] }) {
         return (
           <g key={i}>
             <line x1={PAD.l} y1={y} x2={PAD.l + innerW} y2={y}
-              stroke="#27272f" strokeWidth="1" strokeDasharray="3,4" />
+              style={{ stroke: 'var(--color-border)' }} strokeWidth="1" strokeDasharray="3,4" />
             <text x={PAD.l - 6} y={y + 4} textAnchor="end"
-              fontSize="9" fill="#52525b">{v}</text>
+              fontSize="9" style={{ fill: 'var(--color-text-dim)' }}>{v}</text>
           </g>
         )
       })}
@@ -67,20 +67,20 @@ export function WpmChart({ data }: { data: DataPoint[] }) {
       <path d={areaPath} fill="url(#wpmGrad)" />
 
       {/* Line */}
-      <path d={linePath} fill="none" stroke="#a78bfa" strokeWidth="2"
+      <path d={linePath} fill="none" style={{ stroke: 'var(--color-accent)' }} strokeWidth="2"
         strokeLinecap="round" strokeLinejoin="round" />
 
       {/* Dots */}
       {points.map((p, i) => (
         <circle key={i} cx={p.x} cy={p.y} r="3"
-          fill="#a78bfa" stroke="#0a0a0f" strokeWidth="1.5">
+          style={{ fill: 'var(--color-accent)', stroke: 'var(--color-surface)' }} strokeWidth="1.5">
           <title>{p.wpm} PPM — {p.date}</title>
         </circle>
       ))}
 
       {/* X-axis: first and last date */}
-      <text x={PAD.l}              y={H - 4} fontSize="9" fill="#52525b">{points[0].date}</text>
-      <text x={PAD.l + innerW}     y={H - 4} fontSize="9" fill="#52525b" textAnchor="end">
+      <text x={PAD.l}              y={H - 4} fontSize="9" style={{ fill: 'var(--color-text-dim)' }}>{points[0].date}</text>
+      <text x={PAD.l + innerW}     y={H - 4} fontSize="9" style={{ fill: 'var(--color-text-dim)' }} textAnchor="end">
         {points[points.length - 1].date}
       </text>
     </svg>

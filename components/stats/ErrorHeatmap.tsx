@@ -42,7 +42,7 @@ export function ErrorHeatmap({ errors }: ErrorHeatmapProps) {
             return (
               <div
                 key={key}
-                className="relative w-10 h-10 rounded-lg flex flex-col items-center justify-center border border-[var(--color-border)] transition-all duration-300 group cursor-default"
+                className="relative w-10 h-10 rounded-md flex flex-col items-center justify-center border border-[var(--color-border)] transition-all duration-300 group cursor-default"
                 style={{ backgroundColor: getColor(key) }}
                 title={`${key.toUpperCase()}: ${count} errores`}
               >

@@ -1,8 +1,10 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import type { TestResult } from '@/types'
+import type { TestResult, AdventureState, ItemSlot, Perk, LessonProgressRow } from '@/types'
 import { ACHIEVEMENT_CHECKS, xpGainedForResult, levelFromXp } from '@/lib/achievements'
+import { SHOP_BY_ID, DEFAULT_SKIN } from '@/lib/shop'
+import { LESSON_BY_ID, computeStars } from '@/lib/lessons'
 
 interface SaveResult {
   error?: string
@@ -152,6 +154,94 @@ export async function signOut() {
   await supabase.auth.signOut()
 }
 
+/** Top de teclas que el usuario más falla (para la práctica dirigida). */
+export async function getWeakKeys(limit = 7): Promise<string[]> {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return []
+
+  const { data } = await supabase
+    .from('typing_results')
+    .select('char_errors')
+    .eq('user_id', user.id)
+    .not('char_errors', 'eq', '{}')
+    .limit(80)
+
+  const agg: Record<string, number> = {}
+  for (const row of data ?? []) {
+    const errs = row.char_errors as Record<string, number> | null
+    if (!errs) continue
+    for (const [k, v] of Object.entries(errs)) {
+      if (!/^[a-zñA-ZÑ]$/.test(k)) continue
+      agg[k.toLowerCase()] = (agg[k.toLowerCase()] ?? 0) + Number(v)
+    }
+  }
+
+  return Object.entries(agg)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, limit)
+    .map(([k]) => k)
+}
+
+// ── Curso por lecciones ────────────────────────────────────────
+
+export async function getLessonProgress(): Promise<Record<string, LessonProgressRow>> {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return {}
+
+  const { data } = await supabase
+    .from('lesson_progress')
+    .select('lesson_id, stars, best_wpm, best_accuracy')
+    .eq('user_id', user.id)
+
+  return Object.fromEntries(
+    (data ?? []).map((r) => [
+      r.lesson_id,
+      { stars: r.stars, best_wpm: r.best_wpm, best_accuracy: Number(r.best_accuracy) },
+    ])
+  )
+}
+
+/** Guarda el resultado de una lección. Las estrellas se calculan en el servidor. */
+export async function saveLessonResult(
+  lessonId: string,
+  wpm: number,
+  accuracy: number
+): Promise<{ stars: number } | { error: string }> {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: 'No autenticado' }
+
+  const lesson = LESSON_BY_ID[lessonId]
+  if (!lesson) return { error: 'Lección no válida' }
+
+  const safeWpm = Math.max(0, Math.min(Math.round(wpm), 400))
+  const safeAcc = Math.max(0, Math.min(accuracy, 100))
+  const stars   = computeStars(safeWpm, safeAcc, lesson.minWpm)
+
+  const { data: existing } = await supabase
+    .from('lesson_progress')
+    .select('stars, best_wpm, best_accuracy')
+    .eq('user_id', user.id)
+    .eq('lesson_id', lessonId)
+    .maybeSingle()
+
+  await supabase.from('lesson_progress').upsert(
+    {
+      user_id:       user.id,
+      lesson_id:     lessonId,
+      stars:         Math.max(stars, existing?.stars ?? 0),
+      best_wpm:      Math.max(safeWpm, existing?.best_wpm ?? 0),
+      best_accuracy: Math.max(safeAcc, Number(existing?.best_accuracy ?? 0)),
+      updated_at:    new Date().toISOString(),
+    },
+    { onConflict: 'user_id,lesson_id' }
+  )
+
+  return { stars }
+}
+
 export async function getProfile() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
@@ -234,67 +324,164 @@ export async function getStatistics() {
   return { profile, recent, bestPerMode, achievements: userAch, allAchievements: allAch, totalTests, aggregatedErrors }
 }
 
-export async function saveShortcutProgress(
-  shortcutId: string,
-  category: string,
-  success: boolean
-): Promise<void> {
+// ── Modo Aventura ──────────────────────────────────────────────
+
+/** Construye el estado de aventura (monedas, ítems poseídos/equipados, mejoras). */
+export async function getAdventureState(): Promise<AdventureState | null> {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return
+  if (!user) return null
+
+  const [{ data: profile }, { data: items }] = await Promise.all([
+    supabase.from('users_profile').select('coins, adventure_best').eq('id', user.id).single(),
+    supabase.from('game_items').select('item_id, equipped').eq('user_id', user.id),
+  ])
+
+  // El skin por defecto siempre se posee.
+  const owned = new Set<string>([DEFAULT_SKIN])
+  const equipped: Partial<Record<ItemSlot, string>> = { skin: DEFAULT_SKIN }
+  const perks: Perk[] = []
+
+  for (const row of items ?? []) {
+    owned.add(row.item_id)
+    const item = SHOP_BY_ID[row.item_id]
+    if (!item) continue
+    if (item.type === 'perk') {
+      if (item.perk) perks.push(item.perk)
+    } else if (row.equipped) {
+      equipped[item.type] = row.item_id
+    }
+  }
+
+  return {
+    coins: profile?.coins ?? 0,
+    best:  profile?.adventure_best ?? 0,
+    owned: [...owned],
+    equipped,
+    perks,
+  }
+}
+
+interface ShopActionResult {
+  error?: string
+  coins?: number
+  owned?: string[]
+  equipped?: Partial<Record<ItemSlot, string>>
+  perks?: Perk[]
+}
+
+/** Compra un ítem: valida monedas, descuenta y lo equipa (cosmético) o activa (perk). */
+export async function buyItem(itemId: string): Promise<ShopActionResult> {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: 'No autenticado' }
+
+  const item = SHOP_BY_ID[itemId]
+  if (!item) return { error: 'Ítem no válido' }
+
+  const { data: profile } = await supabase
+    .from('users_profile').select('coins').eq('id', user.id).single()
+  if (!profile) return { error: 'Perfil no encontrado' }
 
   const { data: existing } = await supabase
-    .from('shortcut_progress')
-    .select('attempts, successes')
-    .eq('user_id', user.id)
-    .eq('shortcut_id', shortcutId)
-    .single()
+    .from('game_items').select('item_id').eq('user_id', user.id).eq('item_id', itemId).maybeSingle()
+  if (existing) return { error: 'Ya tienes este ítem' }
 
-  const attempts  = (existing?.attempts  ?? 0) + 1
-  const successes = (existing?.successes ?? 0) + (success ? 1 : 0)
-  const mastered  = successes >= 3 && (successes / attempts) >= 0.8
+  if ((profile.coins ?? 0) < item.price) return { error: 'No tienes suficientes monedas' }
+
+  const newCoins = (profile.coins ?? 0) - item.price
+  const { error: coinErr } = await supabase
+    .from('users_profile').update({ coins: newCoins }).eq('id', user.id)
+  if (coinErr) return { error: coinErr.message }
+
+  const { error: insErr } = await supabase
+    .from('game_items').insert({ user_id: user.id, item_id: itemId, equipped: true })
+  if (insErr) {
+    // revertir el cobro si falla la inserción
+    await supabase.from('users_profile').update({ coins: profile.coins }).eq('id', user.id)
+    return { error: insErr.message }
+  }
+
+  // Los cosméticos recién comprados se auto-equipan: desequipar los del mismo slot.
+  if (item.type !== 'perk') {
+    const siblings = Object.values(SHOP_BY_ID)
+      .filter((i) => i.type === item.type && i.id !== itemId)
+      .map((i) => i.id)
+    if (siblings.length) {
+      await supabase
+        .from('game_items')
+        .update({ equipped: false })
+        .eq('user_id', user.id)
+        .in('item_id', siblings)
+    }
+  }
+
+  const state = await getAdventureState()
+  return { coins: state?.coins, owned: state?.owned, equipped: state?.equipped, perks: state?.perks }
+}
+
+/** Equipa un cosmético ya poseído (uno por slot). */
+export async function equipItem(itemId: string): Promise<ShopActionResult> {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: 'No autenticado' }
+
+  const item = SHOP_BY_ID[itemId]
+  if (!item || item.type === 'perk') return { error: 'Ítem no equipable' }
+
+  // El skin por defecto puede no estar en la tabla todavía.
+  if (itemId !== DEFAULT_SKIN) {
+    const { data: owned } = await supabase
+      .from('game_items').select('item_id').eq('user_id', user.id).eq('item_id', itemId).maybeSingle()
+    if (!owned) return { error: 'No tienes este ítem' }
+  }
+
+  const siblings = Object.values(SHOP_BY_ID)
+    .filter((i) => i.type === item.type)
+    .map((i) => i.id)
 
   await supabase
-    .from('shortcut_progress')
-    .upsert({
-      user_id:        user.id,
-      shortcut_id:    shortcutId,
-      category,
-      attempts,
-      successes,
-      mastered,
-      last_practiced: new Date().toISOString(),
-    }, { onConflict: 'user_id,shortcut_id' })
+    .from('game_items')
+    .update({ equipped: false })
+    .eq('user_id', user.id)
+    .in('item_id', siblings)
+
+  if (itemId !== DEFAULT_SKIN) {
+    await supabase
+      .from('game_items')
+      .update({ equipped: true })
+      .eq('user_id', user.id)
+      .eq('item_id', itemId)
+  }
+
+  const state = await getAdventureState()
+  return { coins: state?.coins, owned: state?.owned, equipped: state?.equipped, perks: state?.perks }
 }
 
-export async function getShortcutProgress(): Promise<Record<string, { attempts: number; successes: number; mastered: boolean }>> {
+/** Guarda el resultado de una partida: suma monedas y actualiza el récord. */
+export async function finishAdventureRun(
+  coinsEarned: number,
+  score: number
+): Promise<{ coins: number; best: number } | { error: string }> {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return {}
+  if (!user) return { error: 'No autenticado' }
 
-  const { data } = await supabase
-    .from('shortcut_progress')
-    .select('shortcut_id, attempts, successes, mastered')
-    .eq('user_id', user.id)
+  const earned = Math.max(0, Math.min(Math.round(coinsEarned), 100000))
+  const safeScore = Math.max(0, Math.min(Math.round(score), 1000000))
 
-  return Object.fromEntries(
-    (data ?? []).map((r) => [r.shortcut_id, { attempts: r.attempts, successes: r.successes, mastered: r.mastered }])
-  )
-}
+  const { data: profile } = await supabase
+    .from('users_profile').select('coins, adventure_best').eq('id', user.id).single()
+  if (!profile) return { error: 'Perfil no encontrado' }
 
-export async function checkDailyChallenge(): Promise<boolean> {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return false
+  const newCoins = (profile.coins ?? 0) + earned
+  const newBest  = Math.max(profile.adventure_best ?? 0, safeScore)
 
-  const today = new Date().toISOString().slice(0, 10)
-  const { count } = await supabase
-    .from('typing_results')
-    .select('*', { count: 'exact', head: true })
-    .eq('user_id', user.id)
-    .eq('text_category', 'daily')
-    .gte('completed_at', `${today}T00:00:00Z`)
-    .lt('completed_at', `${today}T23:59:59Z`)
+  const { error } = await supabase
+    .from('users_profile')
+    .update({ coins: newCoins, adventure_best: newBest })
+    .eq('id', user.id)
+  if (error) return { error: error.message }
 
-  return (count ?? 0) > 0
+  return { coins: newCoins, best: newBest }
 }

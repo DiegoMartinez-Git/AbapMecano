@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { Navbar } from '@/components/layout/Navbar'
 import { UsernameForm } from '@/components/perfil/UsernameForm'
+import { TypingSettings } from '@/components/perfil/TypingSettings'
 
 export default async function PerfilPage() {
   const supabase = await createClient()
@@ -30,11 +31,11 @@ export default async function PerfilPage() {
   return (
     <>
       <Navbar />
-      <main className="flex-1 px-6 py-12 max-w-4xl mx-auto w-full">
+      <main className="flex-1 px-6 py-12 max-w-[1400px] mx-auto w-full">
 
         {/* Profile header */}
         <div className="flex items-center gap-5 mb-10">
-          <div className="w-16 h-16 rounded-2xl bg-[var(--color-surface-2)] border border-[var(--color-border)] flex items-center justify-center text-2xl font-bold text-[var(--color-accent)]">
+          <div className="w-16 h-16 rounded-md bg-[var(--color-surface-2)] border border-[var(--color-border)] flex items-center justify-center text-2xl font-bold text-[var(--color-accent)]">
             {displayName[0].toUpperCase()}
           </div>
           <div className="flex-1">
@@ -60,7 +61,7 @@ export default async function PerfilPage() {
           </div>
 
           {profile?.streak_days ? (
-            <div className="flex flex-col items-center gap-1 px-4 py-3 rounded-xl bg-[var(--color-surface)] border border-[var(--color-border)]">
+            <div className="flex flex-col items-center gap-1 px-4 py-3 rounded-md bg-[var(--color-surface)] border border-[var(--color-border)]">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--color-warning)" stroke="none">
                 <path d="M12 2C9 6 5 9 5 14a7 7 0 0 0 14 0c0-5-3-8-7-12zm0 18a5 5 0 0 1-5-5c0-3 2-6 5-9 3 3 5 6 5 9a5 5 0 0 1-5 5z"/>
               </svg>
@@ -70,6 +71,14 @@ export default async function PerfilPage() {
           ) : null}
         </div>
 
+        {/* Ajustes de mecanografía */}
+        <div className="mb-10">
+          <h2 className="text-sm font-semibold text-[var(--color-text-muted)] mb-4 uppercase tracking-widest">
+            Ajustes de mecanografía
+          </h2>
+          <TypingSettings />
+        </div>
+
         {/* Quick stats */}
         <div className="grid grid-cols-3 gap-4 mb-10">
           {[
@@ -77,7 +86,7 @@ export default async function PerfilPage() {
             { label: 'PPM promedio',     value: avgWpm },
             { label: 'Mejor marca',      value: `${bestWpm} PPM` },
           ].map(({ label, value }) => (
-            <div key={label} className="rounded-2xl bg-[var(--color-surface)] border border-[var(--color-border)] p-5 flex flex-col gap-1">
+            <div key={label} className="rounded-md bg-[var(--color-surface)] border border-[var(--color-border)] p-5 flex flex-col gap-1">
               <span className="text-[10px] uppercase tracking-widest text-[var(--color-text-dim)]">{label}</span>
               <span className="text-3xl font-mono font-bold text-[var(--color-text-main)]">{value}</span>
             </div>
@@ -90,7 +99,7 @@ export default async function PerfilPage() {
             <h2 className="text-sm font-semibold text-[var(--color-text-muted)] mb-4 uppercase tracking-widest">
               Últimos resultados
             </h2>
-            <div className="rounded-2xl bg-[var(--color-surface)] border border-[var(--color-border)] overflow-hidden">
+            <div className="rounded-md bg-[var(--color-surface)] border border-[var(--color-border)] overflow-hidden">
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-[var(--color-border)]">

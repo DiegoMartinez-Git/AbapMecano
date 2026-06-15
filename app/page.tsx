@@ -6,7 +6,7 @@ export default function Home() {
     <>
       <Navbar />
       <main className="flex-1 flex flex-col items-center px-6 py-12">
-        <div className="w-full max-w-4xl">
+        <div className="w-full max-w-[1400px]">
           <div className="text-center mb-10">
             <h1 className="text-3xl font-bold tracking-tight text-[var(--color-text-main)] mb-2">
               Mecanografía

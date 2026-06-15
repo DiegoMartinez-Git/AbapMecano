@@ -1,33 +1,34 @@
 @import "tailwindcss";
 
 @theme inline {
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-lexend);
+  --font-mono: var(--font-roboto-mono);
 
-  /* Paleta base */
-  --color-bg: #0a0a0f;
-  --color-surface: #111118;
-  --color-surface-2: #1a1a26;
-  --color-border: #27272f;
-  --color-border-subtle: #1e1e28;
+  /* Paleta base (tema oscuro carbón, estilo MonkeyType) */
+  --color-bg: #323437;
+  --color-surface: #2c2e31;
+  --color-surface-2: #3a3d41;
+  --color-border: #45474b;
+  --color-border-subtle: #3a3c3f;
 
   /* Texto */
-  --color-text-main: #d4d4d8;
-  --color-text-muted: #71717a;
-  --color-text-dim: #3f3f50;
+  --color-text-main: #d1d0c5;
+  --color-text-muted: #898a85;
+  --color-text-dim: #646669;
 
   /* Estados de tipeo */
-  --color-char-correct: #d4d4d8;
-  --color-char-incorrect: #f87171;
-  --color-char-pending: #3f3f50;
-  --color-cursor: #a78bfa;
+  --color-char-correct: #d1d0c5;
+  --color-char-incorrect: #ca4754;
+  --color-char-pending: #646669;
+  --color-cursor: #e2b714;
 
-  /* Accentos */
-  --color-accent: #a78bfa;
-  --color-accent-dim: #7c3aed;
-  --color-success: #4ade80;
-  --color-warning: #f59e0b;
-  --color-error: #f87171;
+  /* Acentos */
+  --color-accent: #e2b714;
+  --color-accent-dim: #c4a012;
+  --color-on-accent: #2c2e31;
+  --color-success: #98c379;
+  --color-warning: #e5a50a;
+  --color-error: #ca4754;
 }
 
 html {
@@ -41,7 +42,7 @@ html {
 body {
   background-color: var(--color-bg);
   color: var(--color-text-main);
-  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -50,28 +51,6 @@ body {
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 2px; }
-
-/* Cursor de escritura */
-@keyframes blink-cursor {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0; }
-}
-
-.char-cursor {
-  position: relative;
-}
-
-.char-cursor::before {
-  content: '';
-  position: absolute;
-  left: -1px;
-  top: 0.15em;
-  bottom: 0.1em;
-  width: 2px;
-  background-color: var(--color-cursor);
-  border-radius: 1px;
-  animation: blink-cursor 1s ease-in-out infinite;
-}
 
 /* Fade inferior en la zona de texto */
 .text-fade-bottom::after {
@@ -88,4 +67,64 @@ body {
 /* Efecto caret custom en inputs/textarea */
 * {
   caret-color: var(--color-cursor);
+}
+
+/* ── Modo Aventura ──────────────────────────────────────────── */
+.runner-limb { transform-box: fill-box; }
+
+@keyframes leg-swing {
+  0%, 100% { transform: rotate(24deg); }
+  50%      { transform: rotate(-24deg); }
+}
+.leg-front, .arm-back { animation: leg-swing 0.32s ease-in-out infinite; }
+.leg-back,  .arm-front { animation: leg-swing 0.32s ease-in-out infinite reverse; }
+
+@keyframes body-bob {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-3px); }
+}
+.runner-bob { animation: body-bob 0.32s ease-in-out infinite; }
+
+@keyframes runner-hurt {
+  0%, 100% { transform: translateX(0); }
+  25%      { transform: translateX(-3px); }
+  75%      { transform: translateX(3px); }
+}
+.runner-hurt { animation: runner-hurt 0.36s ease-in-out; }
+
+@keyframes runner-slash {
+  from { opacity: 0; transform: rotate(-25deg) scale(0.8); }
+  to   { opacity: 1; transform: rotate(0) scale(1); }
+}
+.runner-slash { animation: runner-slash 0.3s ease-out; }
+
+@keyframes jump-arc {
+  0%   { transform: translateY(0); }
+  45%  { transform: translateY(-46px); }
+  100% { transform: translateY(0); }
+}
+@keyframes jump-high {
+  0%   { transform: translateY(0); }
+  45%  { transform: translateY(-72px) rotate(-8deg); }
+  100% { transform: translateY(0) rotate(0); }
+}
+
+@keyframes coin-spin {
+  0%, 100% { transform: scaleX(1); }
+  50%      { transform: scaleX(0.2); }
+}
+
+@keyframes bug-wobble {
+  0%, 100% { transform: translateY(0) rotate(-4deg); }
+  50%      { transform: translateY(-3px) rotate(4deg); }
+}
+
+@keyframes pet-bob {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-5px); }
+}
+
+@keyframes trail-fade {
+  0%   { opacity: 0.8; transform: translateX(0); }
+  100% { opacity: 0;   transform: translateX(-16px); }
 }

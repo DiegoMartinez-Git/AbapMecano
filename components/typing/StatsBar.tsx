@@ -41,7 +41,7 @@ export function StatsBar({
   const isWarning = mode === 'timed' && timeLeft <= 10 && timeLeft > 0 && status === 'running'
 
   return (
-    <div className="flex items-center gap-8 mt-6 mb-4 px-6 py-4 rounded-2xl bg-[var(--color-surface)] border border-[var(--color-border)]">
+    <div className="flex items-center gap-8 mt-6 mb-4 px-6 py-4 rounded-md bg-[var(--color-surface)] border border-[var(--color-border)]">
       <StatItem label="PPM" value={wpm} />
       <div className="w-px h-8 bg-[var(--color-border)]" />
       <StatItem label="Precisión" value={`${accuracy.toFixed(1)}%`} />

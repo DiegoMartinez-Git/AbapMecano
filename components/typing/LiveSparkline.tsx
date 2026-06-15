@@ -30,8 +30,8 @@ export function LiveSparkline({ data }: LiveSparklineProps) {
       >
         <defs>
           <linearGradient id="spark-gradient" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#a78bfa" stopOpacity="0.4" />
-            <stop offset="100%" stopColor="#a78bfa" stopOpacity="0" />
+            <stop offset="0%" style={{ stopColor: 'var(--color-accent)' }} stopOpacity="0.4" />
+            <stop offset="100%" style={{ stopColor: 'var(--color-accent)' }} stopOpacity="0" />
           </linearGradient>
         </defs>
         {/* Area fill */}
@@ -44,7 +44,7 @@ export function LiveSparkline({ data }: LiveSparklineProps) {
         <polyline
           points={points}
           fill="none"
-          stroke="#a78bfa"
+          style={{ stroke: 'var(--color-accent)' }}
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -57,7 +57,7 @@ export function LiveSparkline({ data }: LiveSparklineProps) {
               cx={lastPt[0]}
               cy={lastPt[1]}
               r="3"
-              fill="#a78bfa"
+              style={{ fill: 'var(--color-accent)' }}
             />
           )
         })()}

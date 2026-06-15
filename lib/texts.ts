@@ -116,5 +116,30 @@ export function generateText(
   return segments.join(' ')
 }
 
+/**
+ * Genera texto cargado con las teclas que el usuario más falla,
+ * priorizando palabras que contienen esas letras (práctica dirigida).
+ */
+export function generateWeakKeyText(weakKeys: string[], count = 40): string {
+  const keys = weakKeys.map((k) => k.toLowerCase()).filter((k) => /^[a-zñ]$/.test(k))
+  if (keys.length === 0) return generateText('words', count, 'generic')
+
+  const pool = WORDS_ES.filter((w) => keys.some((k) => w.includes(k)))
+  const base = pool.length >= 12 ? pool : WORDS_ES
+
+  // Ordena por nº de teclas débiles que contiene cada palabra (más útiles primero)
+  const weighted = base.slice().sort(
+    (a, b) =>
+      keys.filter((k) => b.includes(k)).length - keys.filter((k) => a.includes(k)).length
+  )
+  const top = weighted.slice(0, Math.max(15, Math.floor(weighted.length / 2)))
+
+  const words: string[] = []
+  for (let i = 0; i < count; i++) {
+    words.push(top[Math.floor(Math.random() * top.length)])
+  }
+  return words.join(' ')
+}
+
 export const TIME_LIMITS = [15, 30, 60, 120] as const
 export const WORD_COUNTS = [10, 25, 50, 100] as const

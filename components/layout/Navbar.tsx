@@ -9,8 +9,10 @@ import { useState } from 'react'
 
 const NAV_ITEMS = [
   { href: '/',             label: 'Mecanografía' },
-  { href: '/reto',         label: 'Reto diario' },
-  { href: '/atajos',       label: 'Atajos' },
+  { href: '/curso',        label: 'Curso' },
+  { href: '/practica',     label: 'Práctica' },
+  { href: '/aventura',     label: 'Aventura' },
+  { href: '/ranking',      label: 'Ranking' },
   { href: '/estadisticas', label: 'Estadísticas' },
 ]
 
@@ -47,19 +49,13 @@ export function Navbar() {
   }
 
   return (
-    <header className="w-full border-b border-[var(--color-border)] bg-[var(--color-bg)]/80 backdrop-blur-md sticky top-0 z-40">
-      <div className="max-w-5xl mx-auto px-6 h-14 flex items-center justify-between gap-4">
+    <header className="w-full border-b border-[var(--color-border)] bg-[var(--color-bg)] sticky top-0 z-40">
+      <div className="max-w-[1400px] mx-auto px-6 h-14 flex items-center justify-between gap-4">
 
-        {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 group shrink-0">
-          <span className="text-[var(--color-accent)] group-hover:scale-110 transition-transform">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <rect x="2" y="6" width="20" height="13" rx="2" />
-              <path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M6 14h.01M10 14h.01M14 14h.01M18 14h.01" />
-            </svg>
-          </span>
-          <span className="font-semibold tracking-tight">
-            Dev<span className="text-[var(--color-accent)]">Type</span>
+        {/* Wordmark */}
+        <Link href="/" className="shrink-0">
+          <span className="font-mono font-bold text-lg tracking-tight">
+            <span className="text-[var(--color-accent)]">ABAP</span>Mecano
           </span>
         </Link>
 
@@ -92,6 +88,13 @@ export function Navbar() {
             <>
               {profile && <XpBar xp={profile.xp} level={profile.level} />}
 
+              {(profile?.coins ?? 0) > 0 && (
+                <Link href="/aventura" className="flex items-center gap-1 text-xs font-mono font-semibold text-[#fbbf24] hover:opacity-80 transition-opacity" title="Monedas de aventura">
+                  <svg width="12" height="12" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#fbbf24" stroke="#b45309" strokeWidth="2" /></svg>
+                  {profile?.coins}
+                </Link>
+              )}
+
               {(profile?.streak_days ?? 0) > 0 && (
                 <span className="flex items-center gap-1 text-xs text-[var(--color-warning)] font-medium">
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none">
@@ -120,7 +123,7 @@ export function Navbar() {
           ) : (
             <Link
               href="/login"
-              className="px-4 py-1.5 text-sm rounded-lg bg-[var(--color-accent)] hover:bg-[var(--color-accent-dim)] text-white font-medium transition-colors"
+              className="px-4 py-1.5 text-sm rounded-md bg-[var(--color-accent)] hover:bg-[var(--color-accent-dim)] text-[var(--color-on-accent)] font-medium transition-colors"
             >
               Iniciar sesión
             </Link>

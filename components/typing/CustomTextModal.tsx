@@ -31,7 +31,7 @@ export function CustomTextModal({ isOpen, onClose, onConfirm }: CustomTextModalP
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm"
+            className="fixed inset-0 z-50 bg-black/40"
           />
           <motion.div
             key="modal"
@@ -42,7 +42,7 @@ export function CustomTextModal({ isOpen, onClose, onConfirm }: CustomTextModalP
             className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none"
           >
             <div
-              className="pointer-events-auto w-full max-w-lg rounded-2xl bg-[var(--color-surface)] border border-[var(--color-border)] p-6 shadow-2xl"
+              className="pointer-events-auto w-full max-w-lg rounded-md bg-[var(--color-surface)] border border-[var(--color-border)] p-6 shadow-2xl"
               onClick={(e) => e.stopPropagation()}
             >
               <h2 className="text-base font-bold text-[var(--color-text-main)] mb-1">
@@ -58,7 +58,7 @@ export function CustomTextModal({ isOpen, onClose, onConfirm }: CustomTextModalP
                 onChange={(e) => setValue(e.target.value)}
                 placeholder="Pega tu texto aquí…"
                 rows={6}
-                className="w-full rounded-xl bg-[var(--color-surface-2)] border border-[var(--color-border)] text-sm text-[var(--color-text-main)] placeholder:text-[var(--color-text-dim)] p-3 resize-none focus:outline-none focus:border-[var(--color-accent)] transition-colors font-mono leading-relaxed"
+                className="w-full rounded-md bg-[var(--color-surface-2)] border border-[var(--color-border)] text-sm text-[var(--color-text-main)] placeholder:text-[var(--color-text-dim)] p-3 resize-none focus:outline-none focus:border-[var(--color-accent)] transition-colors font-mono leading-relaxed"
               />
 
               <div className="flex items-center justify-between mt-4">
@@ -68,14 +68,14 @@ export function CustomTextModal({ isOpen, onClose, onConfirm }: CustomTextModalP
                 <div className="flex items-center gap-2">
                   <button
                     onClick={onClose}
-                    className="px-4 py-2 rounded-xl text-sm text-[var(--color-text-muted)] hover:text-[var(--color-text-main)] transition-colors"
+                    className="px-4 py-2 rounded-md text-sm text-[var(--color-text-muted)] hover:text-[var(--color-text-main)] transition-colors"
                   >
                     Cancelar
                   </button>
                   <button
                     onClick={handleConfirm}
                     disabled={value.trim().length < 10}
-                    className="px-4 py-2 rounded-xl bg-[var(--color-accent)] hover:bg-[var(--color-accent-dim)] text-white text-sm font-medium transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                    className="px-4 py-2 rounded-md bg-[var(--color-accent)] hover:bg-[var(--color-accent-dim)] text-[var(--color-on-accent)] text-sm font-medium transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                   >
                     Usar este texto
                   </button>

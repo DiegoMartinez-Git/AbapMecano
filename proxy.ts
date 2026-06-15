@@ -24,7 +24,7 @@ export async function proxy(request: NextRequest) {
   // Refrescar sesión (no borrar sin este bloque)
   const { data: { user } } = await supabase.auth.getUser()
 
-  const isAuthRoute    = request.nextUrl.pathname.startsWith('/login')
+  const isAuthRoute     = request.nextUrl.pathname.startsWith('/login')
   const isCallbackRoute = request.nextUrl.pathname.startsWith('/auth')
 
   // Redirigir a login si no está autenticado (excepto rutas públicas)

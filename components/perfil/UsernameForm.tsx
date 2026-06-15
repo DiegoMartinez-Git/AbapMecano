@@ -56,12 +56,12 @@ export function UsernameForm({ currentUsername }: UsernameFormProps) {
           if (e.key === 'Escape') { setValue(currentUsername); setEditing(false) }
         }}
         maxLength={30}
-        className="px-2 py-1 rounded-lg bg-[var(--color-surface-2)] border border-[var(--color-accent)]/50 text-sm text-[var(--color-text-main)] focus:outline-none font-medium w-40"
+        className="px-2 py-1 rounded-md bg-[var(--color-surface-2)] border border-[var(--color-accent)]/50 text-sm text-[var(--color-text-main)] focus:outline-none font-medium w-40"
       />
       <button
         onClick={handleSave}
         disabled={loading || value.trim().length < 2}
-        className="text-xs px-3 py-1 rounded-lg bg-[var(--color-accent)] hover:bg-[var(--color-accent-dim)] text-white font-medium transition-colors disabled:opacity-40"
+        className="text-xs px-3 py-1 rounded-md bg-[var(--color-accent)] hover:bg-[var(--color-accent-dim)] text-[var(--color-on-accent)] font-medium transition-colors disabled:opacity-40"
       >
         {loading ? '...' : 'Guardar'}
       </button>

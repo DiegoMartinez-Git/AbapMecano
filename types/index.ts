@@ -19,3 +19,43 @@ export interface TestResult {
   completedAt: Date
   charErrors?: Record<string, number>
 }
+
+// ── Modo Aventura ──────────────────────────────────────────────
+export type ItemSlot = 'skin' | 'hat' | 'pet' | 'trail'
+export type ItemType = ItemSlot | 'perk'
+export type Perk = 'magnet' | 'shield' | 'doubleCoins' | 'extraLife' | 'doubleJump'
+
+export interface ShopItem {
+  id: string
+  name: string
+  description: string
+  price: number
+  type: ItemType
+  /** Color del personaje (solo skins) */
+  color?: string
+  /** Glifo/emoji para sombreros, mascotas y mejoras */
+  glyph?: string
+  /** Color de la estela (solo trails) */
+  trailColor?: string
+  /** Mejora jugable asociada (solo type 'perk') */
+  perk?: Perk
+}
+
+/** Progreso de una lección del curso */
+export interface LessonProgressRow {
+  stars: number
+  best_wpm: number
+  best_accuracy: number
+}
+
+/** Estado de los ítems de un usuario, agrupado para el juego y la tienda */
+export interface AdventureState {
+  coins: number
+  best: number
+  /** ids de ítems que el usuario posee */
+  owned: string[]
+  /** ítem equipado por cada slot cosmético */
+  equipped: Partial<Record<ItemSlot, string>>
+  /** mejoras activas (perks poseídos) */
+  perks: Perk[]
+}

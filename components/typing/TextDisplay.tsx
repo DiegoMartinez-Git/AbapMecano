@@ -11,15 +11,22 @@ interface TextDisplayProps {
   isFocused: boolean
   status: TestStatus
   shake?: boolean
+  fontScale?: number
 }
 
-export function TextDisplay({ text, typed, isFocused, status, shake = false }: TextDisplayProps) {
+const BASE_FONT_REM = 1.5
+const LINE_HEIGHT    = 1.85
+
+export function TextDisplay({ text, typed, isFocused, status, shake = false, fontScale = 1 }: TextDisplayProps) {
   const [offsetY, setOffsetY]     = useState(0)
-  const [caretPos, setCaretPos]   = useState({ x: 0, y: 0, h: 24 })
+  const [caretPos, setCaretPos]   = useState({ x: 0, y: 0, h: 24, fs: 24 })
   const [recentlyTyped, setRecentlyTyped] = useState(false)
   const cursorRef  = useRef<HTMLSpanElement>(null)
   const wrapperRef = useRef<HTMLDivElement>(null)
   const recentTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  const fontRem    = BASE_FONT_REM * fontScale
+  const viewportH  = `${(3 * fontRem * LINE_HEIGHT).toFixed(3)}rem`
 
   // Scroll the text to keep cursor visible
   useEffect(() => {
@@ -45,17 +52,19 @@ export function TextDisplay({ text, typed, isFocused, status, shake = false }: T
   useEffect(() => {
     if (!cursorRef.current) return
     const el = cursorRef.current
+    const fs = parseFloat(window.getComputedStyle(el).fontSize) || 24
     setCaretPos({
       x: el.offsetLeft,
       y: el.offsetTop,
       h: el.offsetHeight || 24,
+      fs,
     })
 
     // Mark as recently typed so caret stays solid
     setRecentlyTyped(true)
     if (recentTimerRef.current) clearTimeout(recentTimerRef.current)
     recentTimerRef.current = setTimeout(() => setRecentlyTyped(false), 500)
-  }, [typed])
+  }, [typed, fontScale])
 
   const chars = text.split('')
   const showCaret = status !== 'finished'
@@ -71,7 +80,7 @@ export function TextDisplay({ text, typed, isFocused, status, shake = false }: T
         {/* 3-line viewport */}
         <motion.div
           className="relative w-full overflow-hidden"
-          style={{ height: 'calc(3 * 2.75rem)' }}
+          style={{ height: viewportH }}
           animate={shake ? { x: [0, -8, 8, -6, 6, -3, 3, 0] } : { x: 0 }}
           transition={{ duration: 0.35, ease: 'easeOut' }}
         >
@@ -84,11 +93,12 @@ export function TextDisplay({ text, typed, isFocused, status, shake = false }: T
           {/* Scrolling text wrapper */}
           <div
             ref={wrapperRef}
-            className="relative font-mono text-xl tracking-wide"
+            className="relative font-mono tracking-wide"
             style={{
               transform: `translateY(${offsetY}px)`,
               transition: typed === '' ? 'none' : 'transform 0.12s ease-out',
-              lineHeight: '2.2',
+              fontSize: `${fontRem}rem`,
+              lineHeight: LINE_HEIGHT,
               wordBreak: 'break-word',
               overflowWrap: 'break-word',
             }}
@@ -105,7 +115,7 @@ export function TextDisplay({ text, typed, isFocused, status, shake = false }: T
                   className={cn(
                     'transition-colors duration-75',
                     isCorrect   && 'text-[var(--color-char-correct)]',
-                    isIncorrect && 'text-[var(--color-char-incorrect)] bg-red-500/10 rounded-[2px]',
+                    isIncorrect && 'text-[var(--color-char-incorrect)] bg-[var(--color-error)]/10 rounded-[2px]',
                     !isCorrect && !isIncorrect && 'text-[var(--color-char-pending)]',
                   )}
                 >
@@ -117,11 +127,12 @@ export function TextDisplay({ text, typed, isFocused, status, shake = false }: T
             {/* Animated sliding caret */}
             {showCaret && (
               <motion.div
-                className="absolute top-0 left-0 w-0.5 rounded-full pointer-events-none z-20 bg-[var(--color-cursor)]"
+                className="absolute top-0 left-0 w-[3px] rounded-full pointer-events-none z-20 bg-[var(--color-cursor)]"
+                style={{ boxShadow: '0 0 10px var(--color-cursor)' }}
                 animate={{
                   x: caretPos.x - 1,
-                  y: caretPos.y + caretPos.h * 0.12,
-                  height: caretPos.h * 0.76,
+                  y: caretPos.y + (caretPos.h - caretPos.fs * 0.8) / 2,
+                  height: caretPos.fs * 0.8,
                   opacity: recentlyTyped ? 1 : [1, 1, 0, 0, 1, 1],
                 }}
                 transition={{

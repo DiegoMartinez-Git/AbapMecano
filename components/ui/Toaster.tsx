@@ -30,8 +30,8 @@ function ToastItem({ toast }: { toast: Toast }) {
       exit={{ opacity: 0, x: 80, scale: 0.9 }}
       transition={{ type: 'spring', stiffness: 400, damping: 30 }}
       className={cn(
-        'relative flex items-start gap-3 px-4 py-3 rounded-xl border backdrop-blur-sm',
-        'bg-[var(--color-surface)] shadow-xl min-w-[260px] max-w-[320px] cursor-pointer',
+        'relative flex items-start gap-3 px-4 py-3 rounded-md border',
+        'bg-[var(--color-surface)] shadow-sm min-w-[260px] max-w-[320px] cursor-pointer',
         styles[toast.type]
       )}
       onClick={() => remove(toast.id)}

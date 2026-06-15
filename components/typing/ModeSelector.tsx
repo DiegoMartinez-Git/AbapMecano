@@ -72,7 +72,7 @@ function Toggle({
       disabled={disabled}
       title={label}
       className={cn(
-        'flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium transition-all border',
+        'flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium transition-all border',
         active
           ? 'bg-[var(--color-accent)]/15 border-[var(--color-accent)]/50 text-[var(--color-accent)]'
           : 'border-[var(--color-border)] text-[var(--color-text-dim)] hover:text-[var(--color-text-muted)]',
@@ -96,16 +96,16 @@ export function ModeSelector({
     <div className="flex flex-col items-center gap-3">
       {/* Row 1: mode + time/word options */}
       <div className="flex items-center gap-4 flex-wrap justify-center">
-        <div className="flex items-center bg-[var(--color-surface)] rounded-xl p-1 border border-[var(--color-border)]">
+        <div className="flex items-center bg-[var(--color-surface)] rounded-md p-1 border border-[var(--color-border)]">
           {(['timed', 'words'] as TestMode[]).map((m) => (
             <button
               key={m}
               onClick={() => !disabled && onModeChange(m)}
               disabled={disabled}
               className={cn(
-                'px-4 py-1.5 rounded-lg text-sm font-medium transition-all duration-150',
+                'px-4 py-1.5 rounded-md text-sm font-medium transition-all duration-150',
                 mode === m
-                  ? 'bg-[var(--color-accent)] text-white shadow-sm'
+                  ? 'bg-[var(--color-accent)] text-[var(--color-on-accent)] shadow-sm'
                   : 'text-[var(--color-text-muted)] hover:text-[var(--color-text-main)]',
                 disabled && 'cursor-not-allowed opacity-60'
               )}
@@ -125,7 +125,7 @@ export function ModeSelector({
                   onClick={() => !disabled && onTimeLimitChange(t as TimeLimit)}
                   disabled={disabled}
                   className={cn(
-                    'px-3 py-1 rounded-lg text-sm font-mono font-medium transition-all duration-150',
+                    'px-3 py-1 rounded-md text-sm font-mono font-medium transition-all duration-150',
                     timeLimit === t
                       ? 'text-[var(--color-accent)] bg-[var(--color-surface-2)]'
                       : 'text-[var(--color-text-dim)] hover:text-[var(--color-text-muted)]',
@@ -141,7 +141,7 @@ export function ModeSelector({
                   onClick={() => !disabled && onWordCountChange(w as WordCount)}
                   disabled={disabled}
                   className={cn(
-                    'px-3 py-1 rounded-lg text-sm font-mono font-medium transition-all duration-150',
+                    'px-3 py-1 rounded-md text-sm font-mono font-medium transition-all duration-150',
                     wordCount === w
                       ? 'text-[var(--color-accent)] bg-[var(--color-surface-2)]'
                       : 'text-[var(--color-text-dim)] hover:text-[var(--color-text-muted)]',
@@ -175,7 +175,7 @@ export function ModeSelector({
           onClick={() => !disabled && onCustomText()}
           disabled={disabled}
           className={cn(
-            'flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium transition-all border',
+            'flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium transition-all border',
             'border-[var(--color-border)] text-[var(--color-text-dim)] hover:text-[var(--color-text-muted)]',
             disabled && 'opacity-40 cursor-not-allowed'
           )}

@@ -16,7 +16,7 @@ export function Countdown({ count }: CountdownProps) {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.15 }}
-          className="absolute inset-0 z-30 flex items-center justify-center bg-[var(--color-bg)]/70 backdrop-blur-sm rounded-xl"
+          className="absolute inset-0 z-30 flex items-center justify-center bg-[var(--color-bg)]/85 rounded-md"
         >
           <AnimatePresence mode="wait">
             <motion.span

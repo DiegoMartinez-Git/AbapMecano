@@ -1,4 +1,5 @@
 import { redirect } from 'next/navigation'
+import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { Navbar } from '@/components/layout/Navbar'
 import { WpmChart } from '@/components/stats/WpmChart'
@@ -7,7 +8,7 @@ import { getStatistics } from '@/lib/actions'
 
 function StatCard({ label, value, sub }: { label: string; value: string | number; sub?: string }) {
   return (
-    <div className="rounded-2xl bg-[var(--color-surface)] border border-[var(--color-border)] p-5">
+    <div className="rounded-md bg-[var(--color-surface)] border border-[var(--color-border)] p-5">
       <p className="text-[10px] uppercase tracking-widest text-[var(--color-text-dim)] mb-1">{label}</p>
       <p className="text-3xl font-mono font-bold text-[var(--color-text-main)]">{value}</p>
       {sub && <p className="text-xs text-[var(--color-text-muted)] mt-1">{sub}</p>}
@@ -83,7 +84,7 @@ export default async function EstadisticasPage() {
   return (
     <>
       <Navbar />
-      <main className="flex-1 px-6 py-12 max-w-4xl mx-auto w-full">
+      <main className="flex-1 px-6 py-12 max-w-[1400px] mx-auto w-full">
         <div className="mb-10">
           <h1 className="text-3xl font-bold text-[var(--color-text-main)]">Estadísticas</h1>
           <p className="text-sm text-[var(--color-text-muted)] mt-1">
@@ -100,7 +101,7 @@ export default async function EstadisticasPage() {
         </div>
 
         {/* WPM chart */}
-        <div className="rounded-2xl bg-[var(--color-surface)] border border-[var(--color-border)] p-6 mb-6">
+        <div className="rounded-md bg-[var(--color-surface)] border border-[var(--color-border)] p-6 mb-6">
           <h2 className="text-sm font-semibold text-[var(--color-text-muted)] uppercase tracking-widest mb-4">
             Evolución de velocidad (últimos 30 tests)
           </h2>
@@ -112,7 +113,7 @@ export default async function EstadisticasPage() {
 
         <div className="grid md:grid-cols-2 gap-6 mb-6">
           {/* Weekly activity */}
-          <div className="rounded-2xl bg-[var(--color-surface)] border border-[var(--color-border)] p-6">
+          <div className="rounded-md bg-[var(--color-surface)] border border-[var(--color-border)] p-6">
             <h2 className="text-sm font-semibold text-[var(--color-text-muted)] uppercase tracking-widest mb-5">
               Actividad (últimos 7 días)
             </h2>
@@ -136,7 +137,7 @@ export default async function EstadisticasPage() {
           </div>
 
           {/* Records by mode */}
-          <div className="rounded-2xl bg-[var(--color-surface)] border border-[var(--color-border)] p-6">
+          <div className="rounded-md bg-[var(--color-surface)] border border-[var(--color-border)] p-6">
             <h2 className="text-sm font-semibold text-[var(--color-text-muted)] uppercase tracking-widest mb-5">
               Récords personales por modo
             </h2>
@@ -150,7 +151,7 @@ export default async function EstadisticasPage() {
         </div>
 
         {/* Error heatmap */}
-        <div className="rounded-2xl bg-[var(--color-surface)] border border-[var(--color-border)] p-6 mb-6">
+        <div className="rounded-md bg-[var(--color-surface)] border border-[var(--color-border)] p-6 mb-6">
           <h2 className="text-sm font-semibold text-[var(--color-text-muted)] uppercase tracking-widest mb-2">
             Heatmap de errores por tecla
           </h2>
@@ -158,10 +159,20 @@ export default async function EstadisticasPage() {
             Qué caracteres te cuestan más — cuanto más rojo, más errores
           </p>
           <ErrorHeatmap errors={aggregatedErrors ?? {}} />
+          {Object.keys(aggregatedErrors ?? {}).length > 0 && (
+            <div className="mt-5 text-center">
+              <Link
+                href="/practica"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-[var(--color-accent)] text-[var(--color-on-accent)] text-sm font-medium hover:bg-[var(--color-accent-dim)] transition-colors"
+              >
+                Practicar mis teclas débiles →
+              </Link>
+            </div>
+          )}
         </div>
 
         {/* Achievements */}
-        <div className="rounded-2xl bg-[var(--color-surface)] border border-[var(--color-border)] p-6">
+        <div className="rounded-md bg-[var(--color-surface)] border border-[var(--color-border)] p-6">
           <h2 className="text-sm font-semibold text-[var(--color-text-muted)] uppercase tracking-widest mb-5">
             Logros ({unlockedIds.size}/{allAch?.length ?? 0})
           </h2>
@@ -172,7 +183,7 @@ export default async function EstadisticasPage() {
               return (
                 <div
                   key={ach.id}
-                  className={`flex items-start gap-3 p-3 rounded-xl border transition-colors ${
+                  className={`flex items-start gap-3 p-3 rounded-md border transition-colors ${
                     isUnlocked
                       ? 'border-[var(--color-accent)]/30 bg-[var(--color-accent)]/5'
                       : 'border-[var(--color-border)] opacity-40 grayscale'
