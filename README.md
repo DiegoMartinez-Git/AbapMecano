@@ -1,8 +1,8 @@
 <div align="center">
 
-# ⌨️ AbapMecano
+# AbapMecano
 
-**A typing trainer built for developers — practice real code, master your keyboard, and learn SAP/ABAP terminology while you type.**
+**A typing trainer built for developers — practice on real code, master keyboard accuracy, and learn SAP/ABAP terminology while typing.**
 
 [![Live Demo](https://img.shields.io/badge/Live_Demo-proyecto--mecanografia.vercel.app-e2b714?style=for-the-badge&logo=vercel&logoColor=2c2e31)](https://proyecto-mecanografia.vercel.app)
 
@@ -19,55 +19,55 @@
 
 ---
 
-## 📖 Overview
+## Overview
 
-**AbapMecano** is a web typing trainer designed specifically for software developers. Instead of practising on plain prose, you train on real code patterns, symbols, numbers, and SAP/ABAP terminology — the characters you actually fight with every day.
+AbapMecano is a web typing trainer designed specifically for software developers. Instead of practising on plain prose, it focuses on real code patterns, symbols, numbers, and SAP/ABAP terminology — the characters developers handle most.
 
-It pairs a clean, distraction-free typing experience (inspired by MonkeyType) with progression systems that keep practice engaging: a structured course, targeted weak-key drills, detailed statistics, achievements, and even a gamified "Adventure" mode.
+It combines a clean, distraction-free typing experience (inspired by MonkeyType) with progression systems designed to keep practice engaging: a structured course, targeted weak-key drills, detailed statistics, achievements, and a gamified "Adventure" mode.
 
-> **🔗 Try it live:** **[proyecto-mecanografia.vercel.app](https://proyecto-mecanografia.vercel.app)**
+**Live demo:** [proyecto-mecanografia.vercel.app](https://proyecto-mecanografia.vercel.app)
 
 ---
 
-## ✨ Features
+## Features
 
-### ⌨️ Typing Engine
+### Typing Engine
 - **Multiple modes** — timed tests and fixed word-count tests.
-- **SAP/ABAP mode** — generate text built exclusively from SAP/ABAP keywords and syntax.
-- **Numbers & symbols toggle** — mix digits and special characters into the word pool.
-- **Custom text** — paste your own snippet and practice on it.
+- **SAP/ABAP mode** — generates text built exclusively from SAP/ABAP keywords and syntax.
+- **Numbers and symbols toggle** — mixes digits and special characters into the word pool.
+- **Custom text** — accepts a user-provided snippet to practise on.
 - **Precision mode** — blocks the space bar until the current word is error-free.
-- **3-2-1 countdown** before timed tests, with a smooth animated overlay.
-- **Animated caret** and a live WPM sparkline that updates as you type.
+- **3-2-1 countdown** before timed tests, with an animated overlay.
+- **Animated caret** and a live WPM sparkline that updates during the test.
 - **Caps Lock detection** with an on-screen warning banner.
 
-### 🎹 Learning & Guidance
-- **On-screen keyboard guide** — colour-coded by finger, highlights the next key to press.
+### Learning and Guidance
+- **On-screen keyboard guide** — colour-coded by finger, highlighting the next key to press.
 - **Adjustable font size** and keyboard visibility, persisted across sessions.
-- **Structured course** — 9 progressive lessons (home row → top → bottom → letters → capitals → punctuation → numbers → symbols → ABAP/SAP), with a star rating and a moderate unlock system.
-- **Weak-key practice** — automatically detects your most error-prone keys and generates targeted drills.
+- **Structured course** — 9 progressive lessons (home row, top row, bottom row, all letters, capitals, punctuation, numbers, symbols, and ABAP/SAP), with a star rating and a moderate unlock system.
+- **Weak-key practice** — detects the most error-prone keys and generates targeted drills.
 
-### 📊 Progress & Stats
+### Progress and Statistics
 - **Statistics dashboard** with a WPM-over-time SVG chart.
-- **Error heatmap** — a QWERTY keyboard coloured by how often you mistype each key.
-- **XP, levels, streaks and achievements** to keep you motivated.
-- **Personal records** with a confetti celebration when you beat your best.
-- **Global ranking** to compare your results with other users.
+- **Error heatmap** — a QWERTY keyboard coloured by mistype frequency per key.
+- **XP, levels, streaks and achievements** for long-term motivation.
+- **Personal records** with a confetti celebration on a new best score.
+- **Global ranking** to compare results across users.
 
-### 🎮 Adventure Mode
-- A type-to-play auto-runner: every correct character moves your character forward.
-- Collect coins, defeat **bugs** 🐛, and dodge `{ }` obstacles.
+### Adventure Mode
+- A type-to-play auto-runner: each correct character advances the character.
+- Coins to collect, **bugs** to defeat, and `{ }` obstacles to dodge.
 - An in-game **shop** with cosmetics (skins, hats, pets, trails) and upgrades (extra life, shield, coin magnet, double coins, double jump).
 - Fully rendered with SVG/CSS and Framer Motion — no external assets.
 
-### 🔐 Accounts
+### Accounts
 - **Magic-link authentication** powered by Supabase.
 - Editable profile and username.
-- All your results, progress and unlocks are saved to your account.
+- All results, progress and unlocks are persisted per account.
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 | Layer | Technology |
 | --- | --- |
@@ -84,7 +84,7 @@ It pairs a clean, distraction-free typing experience (inspired by MonkeyType) wi
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 - [Node.js](https://nodejs.org) 20 or later
@@ -107,7 +107,7 @@ npm install
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+Open [http://localhost:3000](http://localhost:3000) in a browser.
 
 ### Environment Variables
 
@@ -118,7 +118,7 @@ NEXT_PUBLIC_SUPABASE_URL=your-supabase-project-url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
 ```
 
-> The Supabase schema includes tables for user profiles, typing results, achievements, lesson progress and adventure items. Set up your own Supabase project and apply the corresponding schema before running.
+> The Supabase schema includes tables for user profiles, typing results, achievements, lesson progress and adventure items. A Supabase project must be set up and the corresponding schema applied before running.
 
 ### Available Scripts
 
@@ -131,7 +131,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 .
@@ -154,15 +154,15 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
 
 ---
 
-## 🎨 Design
+## Design
 
 AbapMecano uses a flat, dark "carbon" theme inspired by MonkeyType's *Serika Dark*, with a mustard-yellow accent (`#e2b714`). Typography pairs **Roboto Mono** (for typing) with **Lexend Deca** (for the UI), both loaded through `next/font`.
 
 ---
 
-## 📦 Deployment
+## Deployment
 
-The app is deployed on [Vercel](https://vercel.com). A production build can be created with:
+The application is deployed on [Vercel](https://vercel.com). A production build is created with:
 
 ```bash
 npm run build
@@ -172,14 +172,14 @@ Supabase environment variables must be configured in the deployment environment 
 
 ---
 
-## 👤 Author
+## Author
 
 **Diego Martínez**
 
 ---
 
-## 📄 License
+## License
 
 © 2026 Diego Martínez. All rights reserved.
 
-This project is shared publicly for portfolio and demonstration purposes. You are welcome to explore the code, but it is not licensed for reuse or redistribution without permission.
+This project is shared publicly for portfolio and demonstration purposes. The code may be reviewed, but it is not licensed for reuse or redistribution without permission.

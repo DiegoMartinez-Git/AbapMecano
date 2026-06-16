@@ -1,8 +1,8 @@
 <div align="center">
 
-# ⌨️ AbapMecano
+# AbapMecano
 
-**Un entrenador de mecanografía hecho para desarrolladores — practica con código real, domina tu teclado y aprende terminología SAP/ABAP mientras escribes.**
+**Un entrenador de mecanografía hecho para desarrolladores — práctica sobre código real, precisión de teclado y terminología SAP/ABAP mientras se escribe.**
 
 [![Demo en vivo](https://img.shields.io/badge/Demo_en_vivo-proyecto--mecanografia.vercel.app-e2b714?style=for-the-badge&logo=vercel&logoColor=2c2e31)](https://proyecto-mecanografia.vercel.app)
 
@@ -19,55 +19,55 @@
 
 ---
 
-## 📖 Descripción
+## Descripción
 
-**AbapMecano** es un entrenador de mecanografía web diseñado específicamente para desarrolladores de software. En lugar de practicar con prosa corriente, entrenas con patrones de código reales, símbolos, números y terminología SAP/ABAP — los caracteres con los que de verdad peleas cada día.
+AbapMecano es un entrenador de mecanografía web diseñado específicamente para desarrolladores de software. En lugar de practicar con prosa corriente, se centra en patrones de código reales, símbolos, números y terminología SAP/ABAP — los caracteres que más manejan los desarrolladores.
 
-Combina una experiencia de tipeo limpia y sin distracciones (inspirada en MonkeyType) con sistemas de progresión que mantienen la práctica entretenida: un curso estructurado, ejercicios dirigidos a tus teclas débiles, estadísticas detalladas, logros e incluso un modo "Aventura" gamificado.
+Combina una experiencia de tipeo limpia y sin distracciones (inspirada en MonkeyType) con sistemas de progresión diseñados para mantener la práctica entretenida: un curso estructurado, ejercicios dirigidos a las teclas débiles, estadísticas detalladas, logros y un modo "Aventura" gamificado.
 
-> **🔗 Pruébalo en vivo:** **[proyecto-mecanografia.vercel.app](https://proyecto-mecanografia.vercel.app)**
+**Demo en vivo:** [proyecto-mecanografia.vercel.app](https://proyecto-mecanografia.vercel.app)
 
 ---
 
-## ✨ Características
+## Características
 
-### ⌨️ Motor de tipeo
+### Motor de tipeo
 - **Varios modos** — tests por tiempo y por número fijo de palabras.
 - **Modo SAP/ABAP** — genera texto compuesto exclusivamente por palabras clave y sintaxis SAP/ABAP.
-- **Toggle de números y símbolos** — mezcla dígitos y caracteres especiales en el pool de palabras.
-- **Texto personalizado** — pega tu propio fragmento y practica con él.
+- **Toggle de números y símbolos** — mezcla dígitos y caracteres especiales en el conjunto de palabras.
+- **Texto personalizado** — admite un fragmento propio para practicar sobre él.
 - **Modo precisión** — bloquea la barra espaciadora hasta que la palabra actual esté sin errores.
 - **Cuenta atrás 3-2-1** antes de los tests por tiempo, con un overlay animado.
-- **Caret animado** y un sparkline de PPM en vivo que se actualiza mientras escribes.
+- **Caret animado** y un sparkline de PPM en vivo que se actualiza durante el test.
 - **Detección de Bloq Mayús** con un aviso en pantalla.
 
-### 🎹 Aprendizaje y guía
-- **Teclado en pantalla** — coloreado por dedo, resalta la siguiente tecla a pulsar.
-- **Tamaño de letra ajustable** y visibilidad del teclado, guardados entre sesiones.
-- **Curso estructurado** — 9 lecciones progresivas (fila central → superior → inferior → letras → mayúsculas → puntuación → números → símbolos → ABAP/SAP), con valoración por estrellas y un sistema de desbloqueo moderado.
-- **Práctica de teclas débiles** — detecta automáticamente las teclas en las que más fallas y genera ejercicios dirigidos.
+### Aprendizaje y guía
+- **Teclado en pantalla** — coloreado por dedo, resaltando la siguiente tecla a pulsar.
+- **Tamaño de letra ajustable** y visibilidad del teclado, persistidos entre sesiones.
+- **Curso estructurado** — 9 lecciones progresivas (fila central, fila superior, fila inferior, todas las letras, mayúsculas, puntuación, números, símbolos y ABAP/SAP), con valoración por estrellas y un sistema de desbloqueo moderado.
+- **Práctica de teclas débiles** — detecta las teclas con más errores y genera ejercicios dirigidos.
 
-### 📊 Progreso y estadísticas
+### Progreso y estadísticas
 - **Panel de estadísticas** con una gráfica SVG de PPM a lo largo del tiempo.
-- **Mapa de calor de errores** — un teclado QWERTY coloreado según la frecuencia con la que fallas cada tecla.
-- **XP, niveles, rachas y logros** para mantenerte motivado.
-- **Récords personales** con una celebración de confeti al batir tu mejor marca.
-- **Ranking global** para comparar tus resultados con otros usuarios.
+- **Mapa de calor de errores** — un teclado QWERTY coloreado según la frecuencia de error por tecla.
+- **XP, niveles, rachas y logros** para la motivación a largo plazo.
+- **Récords personales** con una celebración de confeti al lograr una nueva mejor marca.
+- **Ranking global** para comparar resultados entre usuarios.
 
-### 🎮 Modo Aventura
-- Un auto-runner donde se juega escribiendo: cada carácter correcto hace avanzar a tu personaje.
-- Recoge monedas, derrota **bugs** 🐛 y esquiva obstáculos `{ }`.
+### Modo Aventura
+- Un auto-runner que se juega escribiendo: cada carácter correcto hace avanzar al personaje.
+- Monedas que recoger, **bugs** que derrotar y obstáculos `{ }` que esquivar.
 - Una **tienda** dentro del juego con cosméticos (skins, sombreros, mascotas, estelas) y mejoras (vida extra, escudo, imán de monedas, monedas dobles, doble salto).
 - Totalmente renderizado con SVG/CSS y Framer Motion — sin assets externos.
 
-### 🔐 Cuentas
+### Cuentas
 - **Autenticación con magic link** mediante Supabase.
 - Perfil y nombre de usuario editables.
-- Todos tus resultados, progreso y desbloqueos se guardan en tu cuenta.
+- Todos los resultados, el progreso y los desbloqueos se persisten por cuenta.
 
 ---
 
-## 🛠️ Stack tecnológico
+## Stack tecnológico
 
 | Capa | Tecnología |
 | --- | --- |
@@ -84,7 +84,7 @@ Combina una experiencia de tipeo limpia y sin distracciones (inspirada en Monkey
 
 ---
 
-## 🚀 Primeros pasos
+## Primeros pasos
 
 ### Requisitos previos
 - [Node.js](https://nodejs.org) 20 o superior
@@ -93,32 +93,32 @@ Combina una experiencia de tipeo limpia y sin distracciones (inspirada en Monkey
 ### Instalación
 
 ```bash
-# 1. Clona el repositorio
-git clone <url-de-tu-repo>
+# 1. Clonar el repositorio
+git clone <url-del-repo>
 cd "Proyecto Mecanografía"
 
-# 2. Instala las dependencias
+# 2. Instalar las dependencias
 npm install
 
-# 3. Configura las variables de entorno
-#    Crea un archivo .env.local (ver abajo)
+# 3. Configurar las variables de entorno
+#    Crear un archivo .env.local (ver abajo)
 
-# 4. Arranca el servidor de desarrollo
+# 4. Arrancar el servidor de desarrollo
 npm run dev
 ```
 
-Abre [http://localhost:3000](http://localhost:3000) en tu navegador.
+Abrir [http://localhost:3000](http://localhost:3000) en un navegador.
 
 ### Variables de entorno
 
-Crea un archivo `.env.local` en la raíz del proyecto:
+Crear un archivo `.env.local` en la raíz del proyecto:
 
 ```bash
-NEXT_PUBLIC_SUPABASE_URL=url-de-tu-proyecto-supabase
-NEXT_PUBLIC_SUPABASE_ANON_KEY=tu-clave-anon-de-supabase
+NEXT_PUBLIC_SUPABASE_URL=url-del-proyecto-supabase
+NEXT_PUBLIC_SUPABASE_ANON_KEY=clave-anon-de-supabase
 ```
 
-> El esquema de Supabase incluye tablas para perfiles de usuario, resultados de tipeo, logros, progreso de lecciones e ítems de aventura. Crea tu propio proyecto de Supabase y aplica el esquema correspondiente antes de ejecutar.
+> El esquema de Supabase incluye tablas para perfiles de usuario, resultados de tipeo, logros, progreso de lecciones e ítems de aventura. Es necesario crear un proyecto de Supabase y aplicar el esquema correspondiente antes de ejecutar.
 
 ### Scripts disponibles
 
@@ -131,7 +131,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=tu-clave-anon-de-supabase
 
 ---
 
-## 📁 Estructura del proyecto
+## Estructura del proyecto
 
 ```
 .
@@ -154,15 +154,15 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=tu-clave-anon-de-supabase
 
 ---
 
-## 🎨 Diseño
+## Diseño
 
 AbapMecano usa un tema plano y oscuro tipo "carbón" inspirado en el *Serika Dark* de MonkeyType, con un acento amarillo mostaza (`#e2b714`). La tipografía combina **Roboto Mono** (para el tipeo) con **Lexend Deca** (para la interfaz), ambas cargadas con `next/font`.
 
 ---
 
-## 📦 Despliegue
+## Despliegue
 
-La app está desplegada en [Vercel](https://vercel.com). La build de producción se crea con:
+La aplicación está desplegada en [Vercel](https://vercel.com). La build de producción se crea con:
 
 ```bash
 npm run build
@@ -172,14 +172,14 @@ Las variables de entorno de Supabase deben configurarse en el entorno de desplie
 
 ---
 
-## 👤 Autor
+## Autor
 
 **Diego Martínez**
 
 ---
 
-## 📄 Licencia
+## Licencia
 
 © 2026 Diego Martínez. Todos los derechos reservados.
 
-Este proyecto se comparte públicamente con fines de portfolio y demostración. Puedes explorar el código libremente, pero no está licenciado para su reutilización o redistribución sin permiso.
+Este proyecto se comparte públicamente con fines de portfolio y demostración. El código puede revisarse, pero no está licenciado para su reutilización o redistribución sin permiso.
