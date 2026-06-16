@@ -41,3 +41,24 @@ yarn-error.log*
 next-env.d.ts
 
 .vercel
+
+# AI assistant / agent config (local only)
+CLAUDE.md
+AGENTS.md
+.claude/
+.cursor/
+.cursorrules
+.windsurfrules
+.aider*
+.github/copilot-instructions.md
+
+# editor / IDE
+.idea/
+.vscode/
+*.swp
+
+# OS
+Thumbs.db
+
+# logs
+*.log
